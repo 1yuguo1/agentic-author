@@ -1,0 +1,3 @@
+# LLM & agent orchestration (Qwen via DashScope OpenAI-compatible API)
+langchain-core>=0.3.0
+langchain-openai>=0.2.0

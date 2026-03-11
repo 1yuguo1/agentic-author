@@ -1,0 +1,179 @@
+论文大纲
+【题目】 ：基于智能体写作助手系统的设计与实现 
+
+【摘要】 ： 随着大语言模型技术的爆发，计算机辅助写作已从简单的语法检查进化为内容生成与逻辑优化。本文旨在设计并实现一个基于智能体架构的写作助手系统。系统采用B/S架构，前端使用React框架构建富文本交互界面，后端基于FastAPI提供高性能API服务，并利用LangChain框架编排多智能体协同工作。系统实现了写作大纲生成、段落扩写、风格润色及智能纠错等核心功能。通过引入角色扮演机制，构建了“策划”、“撰稿”与“审校”不同职能的智能体，显著提升了写作效率与质量。
+
+【关键词】： 大语言模型；智能体；辅助写作；React；FastAPI；LangChain
+ 
+【Abstract】 ： With the rapid development of Large Language Model (LLM) technology, computer-aided writing has evolved from simple grammar checking to complex content generation and logic optimization. This thesis aims to design and implement a writing assistant system based on agent architecture. Adopting the Browser/Server (B/S) architecture, the system utilizes the React framework to construct a rich text interactive interface on the frontend, employs FastAPI on the backend to provide high-performance API services, and leverages the LangChain framework to orchestrate multi-agent collaboration. The system implements core functionalities including outline generation, paragraph expansion, style polishing, and intelligent error correction. By introducing a Role-Playing mechanism, agents with distinct functions—namely "Planner," "Writer," and "Reviewer"—are constructed, which significantly improves writing efficiency and quality.
+ 
+【Key Words】 ： Large Language Model; Agent; Writing Assistant; React; FastAPI; LangChain
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+目录
+第1章 绪论	2
+1.1 研究背景与意义	2
+1.2 研究现状	2
+1.3 主要研究内容	3
+1.4 论文结构	3
+第2章 系统需求分析	3
+2.1 业务需求概述	3
+2.2 功能性需求	3
+2.3 非功能性需求	4
+2.4 本章小结	4
+第3章 系统总体设计	4
+3.1 系统总体架构设计	4
+3.2 系统功能模块设计	4
+3.3 系统网络拓扑设计	4
+3.4 智能体工作流设计	5
+3.5 本章小结	5
+第4章 系统数据库设计	5
+4.1 数据库概念设计	5
+4.2 数据库逻辑结构设计	5
+4.3 本章小结	5
+第5章 系统详细设计与实现	5
+5.1 后端服务实现 (FastAPI)	5
+5.2 前端交互实现 (React)	6
+5.3 核心功能场景实现	6
+5.4 本章小结	6
+第6章 部署与测试	6
+6.1 系统部署环境	6
+6.2 系统测试	6
+6.3 系统应用展示	7
+6.4 本章小结	7
+结论	7
+参考文献	7
+附录	7
+致谢	8
+
+
+
+
+
+
+
+
+
+第1章 绪论
+1.1 研究背景与意义
+背景：AIGC技术的快速发展；像word等传统写作工具功能单一，无法满足智能化需求；而通用聊天机器人如ChatGPT缺乏针对写作场景的上下文管理和编辑器集成。
+意义：降低写作门槛，提升文本生产效率；探索LLM在垂直应用领域的工程化落地方法；为用户提供沉浸式的智能写作体验。
+1.2 研究现状
+国内现状：介绍WPS AI、Notion AI等商业产品的特点及局限性（通常收费、闭源）。
+国外现状：介绍Grammarly、Jasper等工具的发展。
+技术现状：简述Prompt Engineering、Agent架构在软件工程中的应用趋势。
+1.3 主要研究内容
+1、基于React的富文本编辑器与AI侧边栏的交互设计。
+2、基于FastAPI的后端服务与WebSocket流式响应实现。
+3、基于LangChain的智能体编排（大纲生成、内容填充、润色优化）。
+4、多轮对话中的上下文记忆与Prompt管理。
+1.4 论文结构
+简述各章节安排。
+第2章 系统需求分析
+2.1 业务需求概述
+1、描述目标用户（学生、自媒体作者、办公人员）的痛点：写作卡顿、灵感枯竭、排版繁琐。
+2、定义系统的核心业务流程：创建文档 -> 唤起AI助手 -> 选择写作模式 -> 生成内容 -> 插入编辑器 -> 保存导出。
+2.2 功能性需求
+2.2.1 用户与文档管理模块
+1、用户注册、登录、个人信息修改。
+2、文档的创建、编辑、保存、删除、导出（PDF/Markdown）。
+2.2.2 智能写作辅助模块
+1、大纲生成 Agent：根据标题自动生成多级大纲。
+2、内容扩写 Agent：根据选中文字或简短指令生成长文本。
+3、文本润色 Agent：提供不同语气（学术、幽默、正式）的改写建议。
+4、纠错 Agent：自动检测错别字与语病。
+2.2.3 交互与设置模块
+1、AI 对话侧边栏（Chat Sidebar）。
+2、流式输出（Streaming）展示。
+3、历史记录管理。
+2.3 非功能性需求
+响应速度：AI生成内容的首字延迟需在可接受范围内（利用WebSocket）。
+并发性能：FastAPI的异步处理能力。
+安全性：API Key的加密存储，JWT用户鉴权。
+2.4 本章小结
+第3章 系统总体设计
+3.1 系统总体架构设计
+1、采用前后端分离架构。
+2、展示层：React + Ant Design + Tiptap富文本编辑器。
+3、业务逻辑层：FastAPI + Pydantic + SQLAlchemy。
+4、智能服务层：LangChain + OpenAI API (或阿里千问)。
+5、数据层：MySQL (业务数据) + Redis (会话缓存/任务队列)。
+3.2 系统功能模块设计
+绘制系统功能模块图，清晰展示各子模块关系。
+3.3 系统网络拓扑设计
+描述客户端、Web服务器、数据库服务器及外部模型API的交互方式。
+3.4 智能体工作流设计
+重点：设计“写作流水线”。例如：用户输入主题 -> 策划Agent生成大纲 -> 用户确认 -> 撰稿Agent分段生成 -> 审校Agent检查。
+绘制序列图或状态图描述Agent之间的协作。
+3.5 本章小结
+第4章 系统数据库设计
+4.1 数据库概念设计
+绘制E-R图。主要实体：用户（User）、文档（Document）、对话历史（ChatHistory）、提示词模板（PromptTemplate）。
+4.2 数据库逻辑结构设计
+用户表 (users)：id, username, password_hash, email...
+文档表 (documents)：id, user_id, title, content, created_at...
+对话记录表 (chat_logs)：id, doc_id, role (user/ai), content, timestamp...
+提示词库表 (prompts)：id, type (outline/polish), template_content...
+4.3 本章小结
+第5章 系统详细设计与实现
+5.1 后端服务实现 (FastAPI)
+5.1.1 基础架构搭建
+介绍FastAPI的依赖注入（Dependency Injection）与路由分发（APIRouter）。
+5.1.2 智能体接口实现
+展示如何使用LangChain构建Chain。
+代码片段：展示PromptTemplate的定义与LLMChain的调用。
+关键技术：实现 Server-Sent Events (SSE) 或 WebSocket 以支持打字机效果。
+5.2 前端交互实现 (React)
+5.2.1 编辑器集成
+实现基于Tiptap的富文本编辑器，自定义AI命令菜单（如“/”命令唤起AI）。
+5.2.2 状态管理与通信
+使用Axios进行HTTP请求，使用Socket.io-client或原生WebSocket处理流式数据。
+展示React Hooks（useState, useEffect）在组件中的应用。
+5.3 核心功能场景实现
+5.3.1 场景一：智能大纲生成
+展示界面截图：输入标题，点击生成，左侧大纲树自动渲染。
+5.3.2 场景二：选文润色
+展示界面截图：选中一段文字，弹出悬浮菜单，选择“学术化润色”，替换原文。
+5.4 本章小结
+第6章 部署与测试
+6.1 系统部署环境
+硬件环境：本地开发机配置。
+软件环境：Node.js, Python 3.10+, MySQL, Docker 。
+6.2 系统测试
+6.2.1 功能测试
+使用测试用例表格，验证注册登录、文档增删改查、AI生成是否正常。
+6.2.2 性能测试
+简要测试API的响应时间。
+6.3 系统应用展示
+选取一个完整的写作案例，展示从零开始到成稿的全过程截图。
+6.4 本章小结
+结论
+总结系统的成果：成功构建了一个基于React和FastAPI的智能写作助手，验证了Agent模式在写作辅助中的有效性。
+不足与展望：目前仅支持文本，未来可扩展多模态（配图生成）；长文档的上下文记忆能力有待优化（引入向量数据库RAG技术）。
+参考文献
+[1] ZHAO W X, ZHOU K, LI J, et al. A Survey of Large Language Models[J]. arXiv preprint arXiv:2303.18223, 2023.
+
+[2] WHITE J, FU Q, HAYS S, et al. A Prompt Pattern Catalog to Enhance Prompt Engineering with ChatGPT[J]. arXiv preprint arXiv:2302.11382, 2023.
+ 
+[3] BANKS A, PORCELLO E. Learning React: Modern Patterns for Developing React Apps[M]. 2nd ed. Sebastopol: O'Reilly Media, 2020.
+ 
+[4] LATHKAR M. FastAPI: Modern Python Web Development[M]. New Delhi: BPB Publications, 2023.
+
+
+附录
+核心代码片段
+数据库建表语句
+致谢
